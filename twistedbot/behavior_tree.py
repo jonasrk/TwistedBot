@@ -709,6 +709,55 @@ class PXplus(BTGoal):
         player = self.blackboard.get_entity(self.blackboard.commander_eid)
         yield self.make_behavior(DoPXplus, player=player)
 
+class DoPXminus(BTAction):
+    def __init__(self, player=None, **kwargs):
+        super(DoPXminus, self).__init__(**kwargs)
+        self.player = player
+        self.name = 'peeking against x direction'
+
+    def on_start(self):
+        this_position = self.player.position_eyelevel
+        this_position.x = 0
+        self.blackboard.bot_turn_to_point(self.blackboard.bot_object, this_position)
+
+    def action(self):
+        if self.duration_ticks > 0:
+            self.status = Status.success
+
+class PXminus(BTGoal):
+    def __init__(self, **kwargs):
+        super(PXminus, self).__init__(**kwargs)
+        self.name = 'peeking against x direction'
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        player = self.blackboard.get_entity(self.blackboard.commander_eid)
+        yield self.make_behavior(DoPXminus, player=player)
+
+class QBl(BTGoal):
+    def __init__(self, **kwargs):
+        super(QBl, self).__init__(**kwargs)
+        self.name = 'querying the block below'
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        print "The block below me is"
+        print bot_block
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
 
 class GoToSign(BTGoal):
     def __init__(self, sign_name=None, **kwargs):
