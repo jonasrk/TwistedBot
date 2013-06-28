@@ -40,7 +40,12 @@ def start():
     print "\n\nWelcome to modified TwistedBot\n\n" \
           "* Standard TwistedBot Logger Muted *\n" \
           "* Encouraged Usage *\n" \
-          " xp : move one block in x direction\n"
+          " xp : move one block in x direction\n" \
+          " xm : move one block against x direction\n" \
+          " yp : move one block in y direction [TODO up/down]\n" \
+          " ym : move one block against y direction [TODO up/down]\n" \
+          " zp : move one block in z direction\n" \
+          " zm : move one block against z direction\n" \
 
     parser = argparse.ArgumentParser(description='Bot arguments.')
     parser.add_argument('--serverhost', default=config.SERVER_HOST,

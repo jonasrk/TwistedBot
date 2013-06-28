@@ -579,7 +579,6 @@ class FollowPlayer(BTGoal):
 class Xplus(BTGoal):
     def __init__(self, **kwargs):
         super(Xplus, self).__init__(**kwargs)
-        self.last_block = None
         self.name = "moving one block in x direction"
 
     @property
@@ -590,10 +589,93 @@ class Xplus(BTGoal):
         return self.blackboard.commander_in_game
 
     def choices(self):
-        entity = self.blackboard.get_entity(self.blackboard.commander_eid)
-        block = self.blackboard.grid_standing_on_block(entity.aabb)
         bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
-        bot_block.coords.x = bot_block.coords.x + 4
+        bot_block.coords.x = bot_block.coords.x + 2
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class Xminus(BTGoal):
+    def __init__(self, **kwargs):
+        super(Xminus, self).__init__(**kwargs)
+        self.name = "moving one block against x direction"
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        bot_block.coords.x = bot_block.coords.x - 2
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class Yplus(BTGoal):
+    def __init__(self, **kwargs):
+        super(Yplus, self).__init__(**kwargs)
+        self.name = "moving one block in y direction"
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        bot_block.coords.y = bot_block.coords.y + 2
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class Yminus(BTGoal):
+    def __init__(self, **kwargs):
+        super(Yminus, self).__init__(**kwargs)
+        self.name = "moving one block against y direction"
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        bot_block.coords.y = bot_block.coords.y - 2
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class Zplus(BTGoal):
+    def __init__(self, **kwargs):
+        super(Zplus, self).__init__(**kwargs)
+        self.name = "moving one block in z direction"
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        bot_block.coords.z = bot_block.coords.z + 2
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class Zminus(BTGoal):
+    def __init__(self, **kwargs):
+        super(Zminus, self).__init__(**kwargs)
+        self.name = "moving one block against z direction"
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        bot_block.coords.z = bot_block.coords.z - 2
         yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
 
 
