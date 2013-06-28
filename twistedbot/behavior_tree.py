@@ -11,6 +11,7 @@ import fops
 import dig
 import packets
 import blocks
+import grid
 from pathfinding import AStarBBCol, AStarCoords, AStarMultiCoords
 from gridspace import GridSpace
 from inventory import InventoryManipulation
@@ -44,6 +45,7 @@ class BlackBoard(object):
         self.get_entity = self._world.entities.get_entity
         self.grid_raycast_to_block = self._world.grid.raycast_to_block
         self.grid_standing_on_block = self._world.grid.standing_on_block
+        self.grid_make_block = self._world.grid.make_block
         self.send_chat_message = self._world.chat.send_chat_message
         self.entities_in_distance = self._world.entities.entities_in_distance
         self.entities_has_entity_eid = self._world.entities.has_entity_eid
@@ -572,6 +574,27 @@ class FollowPlayer(BTGoal):
                 yield self.make_behavior(PeekAtPlayer, player=entity)
             else:
                 yield self.make_behavior(PeekAtPlayer, player=entity)
+
+
+class Xplus(BTGoal):
+    def __init__(self, **kwargs):
+        super(Xplus, self).__init__(**kwargs)
+        self.last_block = None
+        self.name = "moving one block in x direction"
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        entity = self.blackboard.get_entity(self.blackboard.commander_eid)
+        block = self.blackboard.grid_standing_on_block(entity.aabb)
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        bot_block.coords.x = bot_block.coords.x + 4
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
 
 
 class GoToSign(BTGoal):

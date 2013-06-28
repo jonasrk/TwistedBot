@@ -51,12 +51,12 @@ class Logger(object):
     def msg(self, *args, **kwargs):
         if "header" not in kwargs:
             kwargs["header"] = self.name
-        log.msg(*args, **kwargs)
+        pass
 
     def err(self, *args, **kwargs):
         if "header" not in kwargs:
             kwargs["header"] = self.name
-        log.err(*args, **kwargs)
+        pass
 
 
 loggers = {}

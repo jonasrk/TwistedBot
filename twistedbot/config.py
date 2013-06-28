@@ -7,7 +7,7 @@ WHISPER = False
 ONLINE_LOGIN = False
 USE_ENCRYPTION = ONLINE_LOGIN
 
-COMMANDER = "lukleh"
+COMMANDER = "moejoe"
 COMMANDER = COMMANDER.lower()
 
 USERNAME = "twistedbot"
