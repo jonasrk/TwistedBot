@@ -87,6 +87,24 @@ class Grid(object):
         pos = self.chunk_array_position(cx, cy, cz)
         return self.make_block(x, y, z, block_types[pos], chunk.get_meta(y_level, pos))
 
+    def get_block_type(self, x, y, z):
+        if y > 255 or y < 0:
+            return self.make_block(x, y, z, 0, 0)
+        chunk_x = x >> 4
+        chunk_z = z >> 4
+        chunk = self.get_chunk((chunk_x, chunk_z))
+        if chunk is None:
+            return self.make_block(x, y, z, 0, 0)
+        y_level = y >> 4
+        block_types = chunk.block_types[y_level]
+        if block_types is None:
+            return self.make_block(x, y, z, 0, 0)
+        cx = x & 15
+        cy = y & 15
+        cz = z & 15
+        pos = self.chunk_array_position(cx, cy, cz)
+        return block_types[pos]
+
     def chunk_updated(self, chunk_x, chunk_z):
         pass
 

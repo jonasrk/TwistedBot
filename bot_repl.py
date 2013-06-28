@@ -52,6 +52,7 @@ def start():
           " pxm : look away from x\n" \
           "** Querying Environment **\n" \
           " qbl : query block below x\n" \
+          " 9qbl : query nine blocks around x\n" \
 
     parser = argparse.ArgumentParser(description='Bot arguments.')
     parser.add_argument('--serverhost', default=config.SERVER_HOST,

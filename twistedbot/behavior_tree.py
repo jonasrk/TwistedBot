@@ -45,6 +45,8 @@ class BlackBoard(object):
         self.get_entity = self._world.entities.get_entity
         self.grid_raycast_to_block = self._world.grid.raycast_to_block
         self.grid_standing_on_block = self._world.grid.standing_on_block
+        self.grid_get_block = self._world.grid.get_block
+        self.grid_get_blocktype = self._world.grid.get_block_type
         self.grid_make_block = self._world.grid.make_block
         self.send_chat_message = self._world.chat.send_chat_message
         self.entities_in_distance = self._world.entities.entities_in_distance
@@ -757,6 +759,34 @@ class QBl(BTGoal):
         print "The block below me is"
         print bot_block
         yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class Q9Bl(BTGoal):
+    def __init__(self, **kwargs):
+        super(Q9Bl, self).__init__(**kwargs)
+        self.name = 'querying the block below'
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
+        print "------------------------------------------------------------------------------------------------------------------------"
+        s = '|     ' + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y, bot_block.coords.z - 1)) + '     |     ' + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y, bot_block.coords.z)) + '     |     ' + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y, bot_block.coords.z + 1)) + '     |'
+        print s
+        print "------------------------------------------------------------------------------------------------------------------------"
+        s = '|     ' + str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y, bot_block.coords.z - 1)) + '     |     ' + str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y, bot_block.coords.z)) + '     |     ' + str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y, bot_block.coords.z + 1)) + '     |'
+        print s
+        print "------------------------------------------------------------------------------------------------------------------------"
+        s = '|     ' + str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y, bot_block.coords.z - 1))  + '     |     ' + str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y, bot_block.coords.z)) + '     |     ' + str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y, bot_block.coords.z + 1)) + '     |'
+        print s
+        print "------------------------------------------------------------------------------------------------------------------------"
+        yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+
 
 
 class GoToSign(BTGoal):
