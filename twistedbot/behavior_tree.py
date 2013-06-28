@@ -140,7 +140,7 @@ class BehaviorTree(object):
         select survival goal if necessary, if same as current then pass
         right now only assign idle behavior
         """
-        bh = LookAtPlayer(blackboard=self.blackboard)
+        bh = Idle(blackboard=self.blackboard)
         bh.setup()
         if not bh.is_valid():
             bh = Idle(blackboard=self.blackboard)
@@ -677,6 +677,37 @@ class Zminus(BTGoal):
         bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
         bot_block.coords.z = bot_block.coords.z - 2
         yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
+
+class DoPXplus(BTAction):
+    def __init__(self, player=None, **kwargs):
+        super(DoPXplus, self).__init__(**kwargs)
+        self.player = player
+        self.name = 'peeking in x direction'
+
+    def on_start(self):
+        this_position = self.player.position_eyelevel
+        this_position.x = 245
+        self.blackboard.bot_turn_to_point(self.blackboard.bot_object, this_position)
+
+    def action(self):
+        if self.duration_ticks > 0:
+            self.status = Status.success
+
+class PXplus(BTGoal):
+    def __init__(self, **kwargs):
+        super(PXplus, self).__init__(**kwargs)
+        self.name = 'peeking in x direction'
+
+    @property
+    def goal_reached(self):
+        return False
+
+    def is_valid(self):
+        return self.blackboard.commander_in_game
+
+    def choices(self):
+        player = self.blackboard.get_entity(self.blackboard.commander_eid)
+        yield self.make_behavior(DoPXplus, player=player)
 
 
 class GoToSign(BTGoal):

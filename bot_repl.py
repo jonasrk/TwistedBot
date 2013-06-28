@@ -46,6 +46,7 @@ def start():
           " ym : move one block against y direction [TODO up/down]\n" \
           " zp : move one block in z direction\n" \
           " zm : move one block against z direction\n" \
+          " pxp : look at x\n" \
 
     parser = argparse.ArgumentParser(description='Bot arguments.')
     parser.add_argument('--serverhost', default=config.SERVER_HOST,
