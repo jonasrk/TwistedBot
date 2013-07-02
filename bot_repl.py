@@ -28,6 +28,7 @@ class WebProtocol(LineReceiver):
 
     def lineReceived(self, line):
         "processes the command"
+        self.sendLine("received command %s\r\n" % line)
         self.world.chat.process_command_line(line)
 
 class WebClientFactory(Factory):
