@@ -22,278 +22,292 @@ function post_to_url(path) {
 			var str = request.responseText;
 			var n=str.split("-");
 			
-			var rows = 3
+			var rows = 11
 			
-			for (var i=0; i < rows; i++){
+			for (var i=-10; i < rows; i++){
 				
-				for (var j=0; j < rows; j++){
+				for (var j=-10; j < rows; j++){
 					
+					var block_name = n[(j+10)*21 + (i+10) + 1]
 					
+					console.log(document.getElementById("bb" + i + j));
 				
-					if (n[i*3 + j + 1] == "grass block"){
+					if (block_name == "grass block"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/grass_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/grass_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "dirt"){
+					else if (block_name == "undefined"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/dirt.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stonebrick.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "cobblestone"){
+					else if (block_name == "dirt"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stonebrick.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/dirt.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "stone"){
+					else if (block_name == "ice"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stonebrick.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/ice.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "leaves"){
+					else if (block_name == "cobblestone"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/leaves.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stonebrick.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "sand"){
+					else if (block_name == "stone"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/sand.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stonebrick.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "gravel"){
+					else if (block_name == "leaves"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/gravel.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/leaves.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "gold ore"){
+					else if (block_name == "sand"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreGold.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/sand.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "iron ore"){
+					else if (block_name == "gravel"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreIron.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/gravel.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "wood"){
+					else if (block_name == "gold ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/wood.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreGold.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "wool"){
+					else if (block_name == "iron ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/sponge.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreIron.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "sponge"){
+					else if (block_name == "wood"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/sponge.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/wood.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "dandelion"){ //TODO
+					else if (block_name == "wool"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stoneMoss.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/sponge.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "rose"){
+					else if (block_name == "sponge"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/rose.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/sponge.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "brown mushroom"){
+					else if (block_name == "dandelion"){ //TODO
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/mushroom_brown.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stoneMoss.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "red mushroom"){
+					else if (block_name == "rose"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/mushroom_red.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/rose.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "moss stone"){
+					else if (block_name == "brown mushroom"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stoneMoss.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/mushroom_brown.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "obsidian"){
+					else if (block_name == "red mushroom"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/obsidian.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/mushroom_red.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "cactus"){
+					else if (block_name == "moss stone"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/cactus_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stoneMoss.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "pumpkin"){
+					else if (block_name == "obsidian"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/pumpkin_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/obsidian.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "netherrack"){
+					else if (block_name == "cactus"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/netherBrick.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/cactus_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "soul sand"){ //TODO
+					else if (block_name == "pumpkin"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/sand.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/pumpkin_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "mycelium"){
+					else if (block_name == "netherrack"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/mycel_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/netherBrick.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "lily pad"){ //TODO
+					else if (block_name == "soul sand"){ //TODO
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stoneMoss.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/sand.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "end stone"){
+					else if (block_name == "mycelium"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/endframe_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/mycel_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "cocoa pod"){
+					else if (block_name == "lily pad"){ //TODO
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/cocoa_2.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stoneMoss.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "nether quartz ore"){
+					else if (block_name == "end stone"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/netherquartz.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/endframe_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "leaves"){
+					else if (block_name == "cocoa pod"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/leaves.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/cocoa_2.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "coal ore"){
+					else if (block_name == "nether quartz ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreCoal.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/netherquartz.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "diamond ore"){
+					else if (block_name == "leaves"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreDiamond.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/leaves.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "cobweb"){
+					else if (block_name == "coal ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/web.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreCoal.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "grass"){ //TODO double?
+					else if (block_name == "diamond ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/grass_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreDiamond.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "wheat crops"){
+					else if (block_name == "cobweb"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/crop.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/web.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "gravel"){
+					else if (block_name == "grass"){ //TODO double?
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/gravel.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/grass_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "still water"){
+					else if (block_name == "wheat crops"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/water.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/crop.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "still lava"){
+					else if (block_name == "gravel"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/lava.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/gravel.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "redstone ore"){
+					else if (block_name == "still water"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreRedstone.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/water.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "glowing redstone ore"){
+					else if (block_name == "still lava"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/blockRedstone.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/lava.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "glass"){
+					else if (block_name == "redstone ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/glass.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreRedstone.png>";
+					}
+					
+					else if (block_name == "glowing redstone ore"){
+						var modify = document.getElementById("bb" + i + j);
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/blockRedstone.png>";
+					}
+					
+					else if (block_name == "glass"){
+						var modify = document.getElementById("bb" + i + j);
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/glass.png>";
 					}
 										
-					else if (n[i*3 + j + 1] == "snow"){
+					else if (block_name == "snow"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/snow_side.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/snow_side.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "snow block"){
+					else if (block_name == "snow block"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/snow.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/snow.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "clay block"){
+					else if (block_name == "clay block"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/clay.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/clay.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "sugar cane"){ //TODO
+					else if (block_name == "sugar cane"){ //TODO
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stoneMoss.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stoneMoss.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "glowstone block"){ //TODO
+					else if (block_name == "glowstone block"){ //TODO
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/stoneMoss.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/stoneMoss.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "lapis lazuli ore"){
+					else if (block_name == "lapis lazuli ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreLapis.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreLapis.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "melon block"){
+					else if (block_name == "melon block"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/melon_top.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/melon_top.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "nether wart block"){
+					else if (block_name == "nether wart block"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/netherStalk_1.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/netherStalk_1.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "emerald ore"){
+					else if (block_name == "emerald ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/oreEmerald.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/oreEmerald.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "carrots"){
+					else if (block_name == "carrots"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/carrots_3.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/carrots_3.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "potatoes"){
+					else if (block_name == "potatoes"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/potatoes_3.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/potatoes_3.png>";
 					}
 					
-					else if (n[i*3 + j + 1] == "nether quartz ore"){
+					else if (block_name == "nether quartz ore"){
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = "<img height=40 width=40 src=/static/blocks/netherquartz.png>";
+						modify.innerHTML = "<img height=20 width=20 src=/static/blocks/netherquartz.png>";
 					}
 					
 					
 					else{
 						var modify = document.getElementById("bb" + i + j);
-						modify.innerHTML = n[i*3 + j + 1];
+						modify.innerHTML = block_name;
 					}
 					
 				}
 				
 			}
+			var modify = document.getElementById("bb00");
+			modify.innerHTML = "<img height=20 width=20 src=/static/blocks/pumpkin_face.png>";
 	    }
 		}
 		request.send();

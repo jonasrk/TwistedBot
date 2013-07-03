@@ -775,16 +775,20 @@ class Q9Bl(BTGoal):
 
     def choices(self):
         bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
-        s = " " + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z + 1)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z + 1)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z)) \
-        + str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z + 1))
-        print "HIER STEHT DAS s ---->", s
+        s = " "
+        for x in range(-10,11):
+            for y in range(-10,11):
+                s = s + str(self.blackboard.grid_get_block(bot_block.coords.x + x, bot_block.coords.y - 1, bot_block.coords.z + y))
+
+        #s = " " + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z + 1)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z + 1)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z)) \
+        #+ str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z + 1))
         weblog = logbot.getWebLogger()
         weblog.sendLine("%s\r\n\r" % s)
         yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)

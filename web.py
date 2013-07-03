@@ -27,12 +27,9 @@ def button(command):
     tel = telnetlib.Telnet("localhost", 9393)
     tel.write("%s\r\n" % command)
     text = tel.read_until("\r\n\r")
-    print "Bot says: ", text
     text2 = tel.read_until("\r\n\r")
-    print "Bot says: ", text2
     regex = re.compile("[a-z]*")
     results = re.findall(">.+?0", text2)
-    print "results: ", results
     return_string = ""
     for result in results:
         clean = result.strip('>')
