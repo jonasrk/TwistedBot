@@ -19,16 +19,23 @@ from twistedbot.world import World
 
 
 log = logbot.getlogger("MAIN")
+weblog = None
 
 class WebProtocol(LineReceiver):
     "Receives commands from the webinterface - currently via telnet."
     def __init__(self, factory, world):
         self.factory = factory
         self.world = world
+        global weblog
+        weblog = logbot.newWebLogger(self)
+        print "### initialized protocol, weblog is ", weblog
 
     def lineReceived(self, line):
         "processes the command"
-        self.sendLine("received command %s\r\n" % line)
+        print "### received line, weblog is ", weblog
+        print "### received line, weblog is ", self
+        weblog.sendLine("received command %s\r\n\r" % line)
+        #self.sendLine("Test Test\r\n\r")
         self.world.chat.process_command_line(line)
 
 class WebClientFactory(Factory):
@@ -57,23 +64,6 @@ class ConsoleChat(basic.LineReceiver):
 
 
 def start():
-
-    print "\n\nWelcome to modified TwistedBot\n\n" \
-          "* Standard TwistedBot Logger Muted *\n" \
-          "* Encouraged Usage *\n" \
-          "** Moving **\n" \
-          " xp : move one block in x direction\n" \
-          " xm : move one block against x direction\n" \
-          " yp : move one block in y direction [TODO up/down]\n" \
-          " ym : move one block against y direction [TODO up/down]\n" \
-          " zp : move one block in z direction\n" \
-          " zm : move one block against z direction\n" \
-          "** Looking **\n" \
-          " pxp : look at x\n" \
-          " pxm : look away from x\n" \
-          "** Querying Environment **\n" \
-          " qbl : query block below x\n" \
-          " 9qbl : query nine blocks around x\n" \
 
     parser = argparse.ArgumentParser(description='Bot arguments.')
     parser.add_argument('--serverhost', default=config.SERVER_HOST,

@@ -50,7 +50,9 @@ def login_form():
 def button(command):
     tel = telnetlib.Telnet("localhost", 9393)
     tel.write("%s\r\n" % command)
-    text = tel.read_until("\r\n")
+    text = tel.read_until("\r\n\r")
+    print "Bot says: ", text
+    text = tel.read_until("\r\n\r")
     print "Bot says: ", text
     return "Bot says: ", text
 

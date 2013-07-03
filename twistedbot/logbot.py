@@ -5,6 +5,7 @@ from datetime import datetime
 
 from twisted.internet import reactor
 from twisted.python import log, util
+from twisted.protocols.basic import LineReceiver
 
 
 def exit_on_error(_stuff=None, _why=None):
@@ -51,16 +52,31 @@ class Logger(object):
     def msg(self, *args, **kwargs):
         if "header" not in kwargs:
             kwargs["header"] = self.name
-        pass
+        log.msg(*args, **kwargs)
 
     def err(self, *args, **kwargs):
         if "header" not in kwargs:
             kwargs["header"] = self.name
-        pass
+        log.msg(*args, **kwargs)
 
 
 loggers = {}
+weblog = None
 
+class WebLogger(LineReceiver):
+    def __init__(self, object):
+        self = object
+
+    def webmsg(self, line):
+        self.sendLine("received command %s\r\n\r" % line)
+
+def getWebLogger():
+    return weblog
+
+def newWebLogger(object):
+    global weblog
+    weblog = object
+    return object
 
 def getlogger(name):
     if name not in loggers:

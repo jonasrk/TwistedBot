@@ -756,8 +756,9 @@ class QBl(BTGoal):
 
     def choices(self):
         bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
-        print "The block below me is"
-        print bot_block
+        weblog = logbot.getWebLogger()
+        weblog.sendLine("The block below me is  %s\r\n\r" % bot_block)
+        print "The block below me is ", bot_block
         yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
 
 class Q9Bl(BTGoal):
