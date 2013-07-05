@@ -21,7 +21,7 @@
 						|<br>
 						v<br>
 						
-						<canvas id="myCanvas" width="600" height="600"></canvas>
+						<canvas id="myCanvas" width="1000" height="600"></canvas>
 						
 						<div id="output"></div>
 					</body>
