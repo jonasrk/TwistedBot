@@ -19,7 +19,7 @@ function redraw_vis(path) {
 
     int = self.setInterval(function () {
         query_to_url(path)
-    }, 2000);
+    }, 1000);
 
 }
 
@@ -33,6 +33,8 @@ function query_to_url(path) {
 
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
+
+    canvas.width = canvas.width;
 
     request = new XMLHttpRequest();
     request.open("GET", path, true);
