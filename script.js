@@ -45,17 +45,35 @@ function query_to_url(path) {
 
             var img = new Image()
 
+            var lowest_block = 255
+
+            for (var x = 0; x < 16; x++) {
+
+                for (var y = 0; y < 16; y++) {
+
+                    if (blocks_json[x][y][1] < lowest_block){
+
+                        lowest_block = blocks_json[x][y][1]
+
+                    }
+
+                }
+
+            }
+
             for (var rows = 0; rows < 16; rows++) {
 
                 for (var cols = 15; cols >= 0; cols--) {
 
-                    var block_name = blocks_json[cols][rows];
+                    var block_name = blocks_json[cols][rows][0];
                     var offset = (rows % 2) * 10
 
                     var canvas_offset = 17 * 20;
 
-                    var x_coord =  18 * (cols + rows);
-                    var y_coord = canvas_offset + 9 * (rows - cols);
+                    var block_height = blocks_json[cols][rows][1] - lowest_block;
+
+                    var x_coord = 18 * (cols + rows);
+                    var y_coord = canvas_offset + 9 * ((rows - block_height) - cols);
 
                     if (block_name == "170") {
                         img.src = "/static/blocks2/160.png";

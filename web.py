@@ -55,7 +55,7 @@ def button(command):
         text2 = text2.strip()
         chunk_list.extend(json.loads(text2))
 
-    chunk =  [ [ [ 0 for i in range(16) ] for j in range(256) ] for k in range(16) ]
+    chunk =  [ [ [ [0, 0] for i in range(16) ] for j in range(256) ] for k in range(16) ]
 
     for x in range(16):
         for y in range(256):
@@ -71,7 +71,7 @@ def button(command):
                     if chunk[x][y][z] != 0:
                         if y > max:
                             max = y
-                            print_chunk[x][z] = chunk[x][y][z]
+                            print_chunk[x][z] = [chunk[x][y][z], y]
 
     print print_chunk
 
