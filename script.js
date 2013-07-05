@@ -54,12 +54,11 @@ function query_to_url(path) {
                     for (var cols = 15; cols >= 0; cols--) {
 
                         var block_name = blocks_json[cols][y][rows];
-                        var offset = (rows % 2) * 10
 
-                        var canvas_offset = 17 * 10;
+                        var canvas_offset = layers * 15;
 
                         var x_coord = 18 * (cols + rows);
-                        var y_coord = canvas_offset + 9 * (rows - cols);
+                        var y_coord = canvas_offset + 9 * (rows - cols) - (y * 20);
 
                         if (block_name == "170") {
                             img.src = "/static/blocks2/160.png";
