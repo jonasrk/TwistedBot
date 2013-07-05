@@ -8,10 +8,12 @@ import config
 import logbot
 import utils
 import fops
+import json
 import dig
 import packets
 import blocks
 import grid
+import base64
 from pathfinding import AStarBBCol, AStarCoords, AStarMultiCoords
 from gridspace import GridSpace
 from inventory import InventoryManipulation
@@ -46,6 +48,7 @@ class BlackBoard(object):
         self.grid_raycast_to_block = self._world.grid.raycast_to_block
         self.grid_standing_on_block = self._world.grid.standing_on_block
         self.grid_get_block = self._world.grid.get_block
+        self.grid_get_chunk = self._world.grid.get_chunk
         self.grid_get_blocktype = self._world.grid.get_block_type
         self.grid_make_block = self._world.grid.make_block
         self.send_chat_message = self._world.chat.send_chat_message
@@ -776,21 +779,34 @@ class Q9Bl(BTGoal):
     def choices(self):
         bot_block = self.blackboard.bot_standing_on_block(self.blackboard.bot_object)
         s = " "
+
+        print "\n\n\n NOW printing CHUNK \n\n\n"
+        chunk_x = bot_block.coords.x >> 4
+        chunk_z = bot_block.coords.z >> 4
+        block_types = self.blackboard.grid_get_chunk((chunk_x, chunk_z)).block_types
+        print "block types:\n"
+
+        #print block_types
+        #print base64.b64encode(block_types)
+
+        block_types_json = [ [ 0 for i in range(8) ] for j in range(16) ]
+
+        for i in range(0,16):
+            for j in range (0, 8):
+                if block_types[i] != None:
+                    block_types_json[i][j] = json.dumps(list(block_types[i][j*512:j*512+512]))
+                else:
+                    block_types_json[i][j] = list(0 for k in range(0,512))
+        print len(block_types_json)
+        print "\n\n\n FINISHED printing CHUNK \n\n\n"
+#
         for x in range(-10,11):
             for y in range(-10,11):
                 s = s + str(self.blackboard.grid_get_block(bot_block.coords.x + x, bot_block.coords.y - 1, bot_block.coords.z + y))
-
-        #s = " " + str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x + 1, bot_block.coords.y - 1, bot_block.coords.z + 1)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x, bot_block.coords.y - 1, bot_block.coords.z + 1)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z - 1)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z)) \
-        #+ str(self.blackboard.grid_get_block(bot_block.coords.x - 1, bot_block.coords.y - 1, bot_block.coords.z + 1))
         weblog = logbot.getWebLogger()
-        weblog.sendLine("%s\r\n\r" % s)
+        for i in range(0,16):
+            for j in range (0,8):
+                weblog.sendLine("%s\r\n\r" % block_types_json[i][j])
         yield self.make_behavior(TravelTo, coords=bot_block.coords, shorten_path_by=1)
 
 

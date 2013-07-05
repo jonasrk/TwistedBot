@@ -12,20 +12,17 @@
 						<button onclick="post_to_url(&quot;http://localhost:8080/button/pxm&quot;)">pxm</button>
 						<!-- <button onclick="query_to_url(&quot;http://localhost:8080/query/qbl&quot;)">qbl</button> -->
 						<button onclick="query_to_url(&quot;http://localhost:8080/query/q9bl&quot;)">q9bl</button>
+						<button onclick="redraw_vis(&quot;http://localhost:8080/query/q9bl&quot;)">q9bl loop</button>
+						<button onclick="stop_redraw_vis()">stop q9bl loop</button>
+						<button onclick="draw_canvas()">canvas</button>
 						<br>
 						x -><br>
 						z<br>
 						|<br>
 						v<br>
-						<table border=1>
-							
-							%for x in range(-10,11):
-								<tr>
-								%for y in range (-10,11):
-									<td id="bb{{x}}{{y}}"></td>
-								%end
-							%end
-						</table>
+						
+						<canvas id="myCanvas" width="600" height="600"></canvas>
+						
 						<div id="output"></div>
 					</body>
 				</html>

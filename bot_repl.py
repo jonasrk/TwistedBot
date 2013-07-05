@@ -28,12 +28,9 @@ class WebProtocol(LineReceiver):
         self.world = world
         global weblog
         weblog = logbot.newWebLogger(self)
-        print "### initialized protocol, weblog is ", weblog
 
     def lineReceived(self, line):
         "processes the command"
-        print "### received line, weblog is ", weblog
-        print "### received line, weblog is ", self
         weblog.sendLine("received command %s\r\n\r" % line)
         #self.sendLine("Test Test\r\n\r")
         self.world.chat.process_command_line(line)
