@@ -41,7 +41,9 @@ function query_to_url(path) {
         if ((request.readyState === 4) && (request.status === 200)) {
 
             var str = request.responseText;
-            var blocks_json = JSON.parse(str);
+            var return_stuff = JSON.parse(str);
+            var blocks_json = return_stuff[0];
+            var bot_block = return_stuff[1];
 
             var img = new Image();
 
@@ -73,7 +75,7 @@ function query_to_url(path) {
                             context.drawImage(img, x_coord, y_coord, 40, 40);
                         }
                         else if (block_name == "173") {
-                            img.src = "/static/blocks2/163.png>";
+                            img.src = "/static/blocks2/163.png";
                             context.drawImage(img, x_coord, y_coord, 40, 40);
                         }
 
@@ -92,6 +94,11 @@ function query_to_url(path) {
                 }
 
             }
+
+            var x_coord = 18 * (bot_block[0]%16 + bot_block[2]%16);
+            var y_coord = canvas_offset + 9 * (bot_block[2]%16 - bot_block[0]%16) - ((((layers-1)/2)+2) * 20);
+            img.src = "/static/blocks2/bot.png";
+            context.drawImage(img, x_coord, y_coord, 40, 80);
 
         }
 

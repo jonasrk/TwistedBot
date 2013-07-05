@@ -798,12 +798,15 @@ class Q9Bl(BTGoal):
                 else:
                     block_types_json[i][j] = list(0 for k in range(0,512))
         print len(block_types_json)
+        print [bot_block.coords.x,bot_block.coords.y,bot_block.coords.z]
         print "\n\n\n FINISHED printing CHUNK \n\n\n"
 #
         for x in range(-10,11):
             for y in range(-10,11):
                 s = s + str(self.blackboard.grid_get_block(bot_block.coords.x + x, bot_block.coords.y - 1, bot_block.coords.z + y))
         weblog = logbot.getWebLogger()
+        weblog.sendLine("%s\r\n\r" % json.dumps([bot_block.coords.x,bot_block.coords.y,bot_block.coords.z]))
+        #weblog.sendLine("bazinga\r\n\r")
         for i in range(0,16):
             for j in range (0,8):
                 weblog.sendLine("%s\r\n\r" % block_types_json[i][j])

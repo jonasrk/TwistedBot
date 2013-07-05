@@ -30,6 +30,8 @@ def button(command):
     tel = telnetlib.Telnet("localhost", 9393)
     tel.write("%s\r\n" % command)
     text = tel.read_until("\r\n\r")
+    bot_block = json.loads(tel.read_until("\r\n\r").strip())
+    print "\n\n\nThe Bot stands on %s !\n\n\n" % bot_block
     chunk_list = list()
     print "\n\n JSON START \n\n"
     for i in range(0, 16):
@@ -67,16 +69,7 @@ def button(command):
 
     print "nach array-isierung\n"
 
-    no_block_found = True
-    height = 256
-    while(no_block_found):
-        height = height - 1
-        for x in range(16):
-            for z in range(16):
-                if chunk[x][height][z] != 0:
-                    no_block_found = False
-
-    print "nach hoehenfindung\n"
+    height = bot_block[1]
 
     layers = 21
 
@@ -95,7 +88,12 @@ def button(command):
     #    clean = clean.strip('0')
     #    clean = clean.strip()
     #    return_string = return_string + "-" + clean
-    return json.dumps(chunk_small)
+
+    return_stuff = [chunk_small, bot_block]
+
+    return json.dumps(return_stuff)
+
+
 
 
 @route('/static/<filename:path>')
