@@ -43,17 +43,50 @@ function query_to_url(path) {
             var str = request.responseText;
             var blocks_json = JSON.parse(str);
 
-            var img = new Image()
+            var img = new Image();
 
-            var lowest_block = 255
+            var layers = 21;
 
-            for (var x = 0; x < 16; x++) {
+            for (var y =  0; y < layers; y++) {
 
-                for (var y = 0; y < 16; y++) {
+                for (var rows = 0; rows < 16; rows++) {
 
-                    if (blocks_json[x][y][1] < lowest_block){
+                    for (var cols = 15; cols >= 0; cols--) {
 
-                        lowest_block = blocks_json[x][y][1]
+                        var block_name = blocks_json[cols][y][rows];
+                        var offset = (rows % 2) * 10
+
+                        var canvas_offset = 17 * 10;
+
+                        var x_coord = 18 * (cols + rows);
+                        var y_coord = canvas_offset + 9 * (rows - cols);
+
+                        if (block_name == "170") {
+                            img.src = "/static/blocks2/160.png";
+                            context.drawImage(img, x_coord, y_coord, 40, 40);
+                        }
+                        else if (block_name == "171") {
+                            img.src = "/static/blocks2/161.png";
+                            context.drawImage(img, x_coord, y_coord, 40, 40);
+                        }
+                        else if (block_name == "172") {
+                            img.src = "/static/blocks2/162.png";
+                            context.drawImage(img, x_coord, y_coord, 40, 40);
+                        }
+                        else if (block_name == "173") {
+                            img.src = "/static/blocks2/163.png>";
+                            context.drawImage(img, x_coord, y_coord, 40, 40);
+                        }
+
+                        else if (block_name == "0") {
+
+                        }
+
+                        else {
+
+                            img.src = "/static/blocks2/" + block_name + ".png";
+                            context.drawImage(img, x_coord, y_coord, 40, 40);
+                        }
 
                     }
 
@@ -61,45 +94,6 @@ function query_to_url(path) {
 
             }
 
-            for (var rows = 0; rows < 16; rows++) {
-
-                for (var cols = 15; cols >= 0; cols--) {
-
-                    var block_name = blocks_json[cols][rows][0];
-                    var offset = (rows % 2) * 10
-
-                    var canvas_offset = 17 * 20;
-
-                    var block_height = blocks_json[cols][rows][1] - lowest_block;
-
-                    var x_coord = 18 * (cols + rows);
-                    var y_coord = canvas_offset + 9 * ((rows - block_height) - cols);
-
-                    if (block_name == "170") {
-                        img.src = "/static/blocks2/160.png";
-                        context.drawImage(img, x_coord, y_coord, 40, 40);
-                    }
-                    else if (block_name == "171") {
-                        img.src = "/static/blocks2/161.png";
-                        context.drawImage(img, x_coord, y_coord, 40, 40);
-                    }
-                    else if (block_name == "172") {
-                        img.src = "/static/blocks2/162.png";
-                        context.drawImage(img, x_coord, y_coord, 40, 40);
-                    }
-                    else if (block_name == "173") {
-                        img.src = "/static/blocks2/163.png>";
-                        context.drawImage(img, x_coord, y_coord, 40, 40);
-                    }
-                    else {
-
-                        img.src = "/static/blocks2/" + block_name + ".png";
-                        context.drawImage(img, x_coord, y_coord, 40, 40);
-                    }
-
-                }
-
-            }
         }
 
     };
