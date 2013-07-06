@@ -9,10 +9,12 @@ __date__ = '02.07.13'
 from bottle import route, run, template, static_file
 import telnetlib
 import json
+import time
+import datetime
 
 
 @route('/bot')
-def login_form():
+def commence_webinterface():
     return template('web')
 
 
@@ -20,45 +22,28 @@ def login_form():
 def button(command):
     tel = telnetlib.Telnet("localhost", 9393)
     tel.write("%s\r\n" % command)
-    text = tel.read_until("\r\n\r")
-    print "Bot says: ", text
-    return "Bot says: ", text
+    bots_answer = tel.read_until("\r\n\r")
+    tel.close()
+    time_now = time.time()
+    format_time = datetime.datetime.fromtimestamp(time_now).strftime('%Y-%m-%d %H:%M:%S')
+    return "Bot <'{0}'> : '{1}'".format(format_time, bots_answer)
 
 
 @route('/query/<command>')
 def button(command):
     tel = telnetlib.Telnet("localhost", 9393)
     tel.write("%s\r\n" % command)
-    text = tel.read_until("\r\n\r")
+    text = tel.read_until("\r\n\r") #command does currently not get displayed for queries
+
     bot_block = json.loads(tel.read_until("\r\n\r").strip())
-    print "\n\n\nThe Bot stands on %s !\n\n\n" % bot_block
+
     chunk_list = list()
-    print "\n\n JSON START \n\n"
-    for i in range(0, 16):
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
-        text2 = tel.read_until("\r\n\r")
-        text2 = text2.strip()
-        chunk_list.extend(json.loads(text2))
+    for i in range(0, 128):
+        next_chunk_part = tel.read_until("\r\n\r")
+        next_chunk_part = next_chunk_part.strip()
+        chunk_list.extend(json.loads(next_chunk_part))
+
+    tel.close()
 
     chunk = [[[[0, 0] for i in range(16)] for j in range(256)] for k in range(16)]
 
@@ -67,33 +52,18 @@ def button(command):
             for z in range(16):
                 chunk[x][y][z] = chunk_list[y * 16 * 16 + z * 16 + x]
 
-    print "nach array-isierung\n"
+    bot_height = bot_block[1]
 
-    height = bot_block[1]
+    layers = 20 # 4 layers equal 1kb that are transferred to the webinterface
 
-    layers = 21
-
-    chunk_small = [[[[0, 0] for i in range(16)] for j in range(layers)] for k in range(16)]
+    web_chunk = [[[[0, 0] for i in range(16)] for j in range(layers)] for k in range(16)]
 
     for x in range(16):
         for y in range(layers):
             for z in range(16):
-                chunk_small[x][y][z] = chunk[x][height-((layers-1)/2)+y][z]
+                web_chunk[x][y][z] = chunk[x][bot_height - ((layers - 1) / 2) + y][z]
 
-
-
-    return_string = ""
-    #for result in results:
-    #    clean = result.strip('>')
-    #    clean = clean.strip('0')
-    #    clean = clean.strip()
-    #    return_string = return_string + "-" + clean
-
-    return_stuff = [chunk_small, bot_block]
-
-    return json.dumps(return_stuff)
-
-
+    return json.dumps([web_chunk, bot_block, layers])
 
 
 @route('/static/<filename:path>')
