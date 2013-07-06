@@ -16,21 +16,33 @@ function send_command(path) {
 
 function redraw_vis(path) {
 
-    redraw_interval = setInterval(function () {
-        query_chunk(path)
-    }, 3000);
+    redraw_chunk_interval = setInterval(function () {
+        query_and_draw_chunk(path)
+    }, 5000);
+
+        redraw_bot_interval = setInterval(function () {
+        query_and_draw_bot(path)
+    }, 500);
 
 }
 
 function stop_redraw_vis() {
 
-    redraw_interval = window.clearInterval(redraw_interval)
+    redraw_interval = window.clearInterval(redraw_bot_interval);
+    redraw_interval = window.clearInterval(redraw_chunk_interval);
 
 }
 
-function query_chunk(path) {
+function query_and_draw_chunk(path){
 
-    var canvas = document.getElementById('myCanvas');
+    query_and_draw_chunk(path);
+    query_and_draw_bot(path);
+
+}
+
+function query_and_draw_chunk(path) {
+
+    var canvas = document.getElementById('ChunkCanvas');
     var context = canvas.getContext('2d');
 
     canvas.width = canvas.width; //clear canvas
@@ -71,6 +83,32 @@ function query_chunk(path) {
                 }
 
             }
+
+        }
+
+    };
+    request.send();
+}
+
+function query_and_draw_bot(path) {
+
+    var canvas = document.getElementById('BotCanvas');
+    var context = canvas.getContext('2d');
+
+    canvas.width = canvas.width; //clear canvas
+
+    var request = new XMLHttpRequest();
+    request.open("GET", path, true);
+    request.onreadystatechange = function () {
+
+        if ((request.readyState === 4) && (request.status === 200)) {
+
+            var blocks_and_botblock_and_layers = JSON.parse(request.responseText);
+            var bot_block = blocks_and_botblock_and_layers[1];
+            var layers = blocks_and_botblock_and_layers[2];
+            var canvas_offset = layers * 15;
+
+            var img = new Image();
 
             var x_coord = 18 * (bot_block[0] % 16 + bot_block[2] % 16);
             var y_coord = canvas_offset + 9 * (bot_block[2] % 16 - bot_block[0] % 16) - ((((layers - 1) / 2) + 2) * 20);
