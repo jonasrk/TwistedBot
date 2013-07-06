@@ -8,6 +8,8 @@ syspath_fix.update_sys_path()
 
 from twisted.internet import reactor
 from twisted.protocols import basic
+from twisted.protocols.basic import LineReceiver
+from twisted.internet.protocol import Factory
 from twisted.internet.defer import inlineCallbacks
 
 import twistedbot.factory as factory
@@ -17,6 +19,29 @@ from twistedbot.world import World
 
 
 log = logbot.getlogger("MAIN")
+weblog = None
+
+class WebProtocol(LineReceiver):
+    "Receives commands from the webinterface - currently via telnet."
+    def __init__(self, factory, world):
+        self.factory = factory
+        self.world = world
+        global weblog
+        weblog = logbot.newWebLogger(self)
+
+    def lineReceived(self, line):
+        "processes the command"
+        weblog.sendLine("received command %s\r\n\r" % line)
+        #self.sendLine("Test Test\r\n\r")
+        self.world.chat.process_command_line(line)
+
+class WebClientFactory(Factory):
+    "Instantiates a connection with the webinterface - currently via telnet."
+    def __init__(self, world):
+        self.world = world
+
+    def buildProtocol(self, addr):
+        return WebProtocol(self, self.world)
 
 
 class ConsoleChat(basic.LineReceiver):
@@ -36,6 +61,7 @@ class ConsoleChat(basic.LineReceiver):
 
 
 def start():
+
     parser = argparse.ArgumentParser(description='Bot arguments.')
     parser.add_argument('--serverhost', default=config.SERVER_HOST,
                         dest='serverhost', help='Minecraft server host')
@@ -71,7 +97,7 @@ def start():
     config.USE_ENCRYPTION = args.use_encryption or args.onlinemode
     config.ONLINE_LOGIN = args.onlinemode
     if config.USE_ENCRYPTION:
-        factory.import_encryption()  
+        factory.import_encryption()
     config.COMMANDER = args.commandername.lower()
     host = args.serverhost
     port = args.serverport
@@ -93,7 +119,8 @@ def start():
         if config.ONLINE_LOGIN:
             yield mc_factory.online_auth()
         if mc_factory.clean_to_connect:
-            reactor.connectTCP(host, port, mc_factory)
+            reactor.connectTCP(host, port, mc_factory) # connects to the minecraft server
+    reactor.listenTCP(9393, WebClientFactory(world)) # listens for incoming connections - currently via telnet
     connect()
 
     signal.signal(signal.SIGINT, customKeyboardInterruptHandler)
