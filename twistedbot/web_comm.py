@@ -12,8 +12,17 @@ class WebComm():
     def parse_command(self, command):
         if command.strip() == "q9bl":
             self.send_chunk_to_webinterface()
+        if command.strip() == "send_bot_position":
+            self.send_bot_position_to_webinterface()
         else:
             self.webprotocol.world.chat.process_command_line(command)
+
+    def send_bot_position_to_webinterface(self):
+        blackboard = self.webprotocol.world.bot.behavior_tree.blackboard
+        bot_object = blackboard.bot_object
+        bot_block = blackboard.bot_standing_on_block(bot_object)
+
+        self.weblog.sendLine("%s\r\n\r" % json.dumps([bot_block.coords.x, bot_block.coords.y, bot_block.coords.z]))
 
     def send_chunk_to_webinterface(self):
         blackboard = self.webprotocol.world.bot.behavior_tree.blackboard

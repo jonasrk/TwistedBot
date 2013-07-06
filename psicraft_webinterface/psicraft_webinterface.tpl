@@ -12,22 +12,20 @@
         <button onclick="send_command(&quot;http://localhost:8080/button/zm&quot;)">z-</button>
         <button onclick="send_command(&quot;http://localhost:8080/button/pxp&quot;)">peek@x+</button>
         <button onclick="send_command(&quot;http://localhost:8080/button/pxm&quot;)">peek@x-</button>
-        <button onclick="query_and_draw_chunk(&quot;http://localhost:8080/query/q9bl&quot;)">draw chunk</button>
-        <button onclick="redraw_vis(&quot;http://localhost:8080/query/q9bl&quot;)">draw chunk continuously</button>
+        <button onclick="query_and_draw()">draw chunk</button>
+        <button onclick="redraw_vis()">draw chunk continuously</button>
         <button onclick="stop_redraw_vis()">stop drawing chunk continuously</button>
+        <button onclick="more_layers()">more layers</button>
+        <button onclick="fewer_layers()">fewer layers</button>
+        
+        <div id="layer_div">16 layers</div>
         
         <p><textarea id="log_area" cols="70"></textarea></p>
-        
-        <br>
-        x /^<br>
-        <br>
-        z<br>
-        \<br>
-        v<br>
         
         <div class="wrapper">
             <canvas id="ChunkCanvas" width="1000" height="600"></canvas>
             <canvas id="BotCanvas" width="1000" height="600"></canvas>
         </div>
+        
     </body>
 </html>

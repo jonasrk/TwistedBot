@@ -12,6 +12,8 @@ import json
 import time
 import datetime
 
+layers = 16 # 4 layers equal 1kb that are transferred to the webinterface
+
 
 @route('/bot')
 def commence_webinterface():
@@ -29,10 +31,10 @@ def button(command):
     return "Bot <'{0}'> : '{1}'".format(format_time, bots_answer)
 
 
-@route('/query/<command>')
-def button(command):
+@route('/query_chunk')
+def query_chunk():
     tel = telnetlib.Telnet("localhost", 9393)
-    tel.write("%s\r\n" % command)
+    tel.write("q9bl\r\n")
     text = tel.read_until("\r\n\r") #command does currently not get displayed for queries
 
     bot_block = json.loads(tel.read_until("\r\n\r").strip())
@@ -54,8 +56,6 @@ def button(command):
 
     bot_height = bot_block[1]
 
-    layers = 20 # 4 layers equal 1kb that are transferred to the webinterface
-
     web_chunk = [[[[0, 0] for i in range(16)] for j in range(layers)] for k in range(16)]
 
     for x in range(16):
@@ -64,6 +64,31 @@ def button(command):
                 web_chunk[x][y][z] = chunk[x][bot_height - ((layers - 1) / 2) + y][z]
 
     return json.dumps([web_chunk, bot_block, layers])
+
+@route('/query_bot')
+def query_bot():
+    tel = telnetlib.Telnet("localhost", 9393)
+    tel.write("send_bot_position\r\n")
+    text = tel.read_until("\r\n\r") #command does currently not get displayed for queries
+
+    bot_block = json.loads(tel.read_until("\r\n\r").strip())
+
+    return json.dumps([bot_block, layers])
+
+
+@route('/fewer_layers')
+def fewer_layers():
+    global layers
+    layers = layers - 1
+    return str(layers)
+
+@route('/more_layers')
+def more_layers():
+    global layers
+    layers = layers + 1
+    return str(layers)
+
+
 
 
 @route('/static/<filename:path>')
