@@ -708,7 +708,7 @@ class PXplus(BTGoal):
         return False
 
     def is_valid(self):
-        return self.blackboard.commander_in_game
+        return self.True
 
     def choices(self):
         player = self.blackboard.get_entity(self.blackboard.commander_eid)

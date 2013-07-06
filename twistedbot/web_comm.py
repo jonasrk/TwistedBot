@@ -9,6 +9,12 @@ class WebComm():
         self.webprotocol = webprotocol
         self.weblog = weblog
 
+    def parse_command(self, command):
+        if command.strip() == "q9bl":
+            self.send_chunk_to_webinterface()
+        else:
+            self.webprotocol.world.chat.process_command_line(command)
+
     def send_chunk_to_webinterface(self):
         blackboard = self.webprotocol.world.bot.behavior_tree.blackboard
         bot_object = blackboard.bot_object
