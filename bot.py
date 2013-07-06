@@ -1,9 +1,9 @@
-
-
 import signal
 import argparse
+import json
 
 import syspath_fix
+
 syspath_fix.update_sys_path()
 
 from twisted.internet import reactor
@@ -19,24 +19,55 @@ from twistedbot.world import World
 
 
 log = logbot.getlogger("MAIN")
-weblog = None
+
 
 class WebProtocol(LineReceiver):
     "Receives commands from the webinterface - currently via telnet."
+
     def __init__(self, factory, world):
         self.factory = factory
         self.world = world
-        global weblog
-        weblog = logbot.newWebLogger(self)
+        self.weblog = logbot.newWebLogger(self)
 
     def lineReceived(self, line):
         "processes the command"
-        weblog.sendLine("received command %s\r\n\r" % line)
-        #self.sendLine("Test Test\r\n\r")
-        self.world.chat.process_command_line(line)
+        self.weblog.sendLine("received command %s\r\n\r" % line)
+        #self.world.chat.process_command_line(line)
+        self.send_chunk_to_webinterface()
+
+    def send_chunk_to_webinterface(self):
+
+        blackboard = self.world.bot.behavior_tree.blackboard
+        bot_object = blackboard.bot_object
+        bot_block = blackboard.bot_standing_on_block(bot_object)
+
+        chunk_x = bot_block.coords.x >> 4
+        chunk_z = bot_block.coords.z >> 4
+
+        block_types = self.world.grid.get_chunk((chunk_x, chunk_z)).block_types
+
+        block_types_json = [[0 for i in range(8)] for j in range(16)]
+
+        for i in range(0, 16):
+            for j in range(0, 8):
+                if block_types[i] != None:
+                    block_types_json[i][j] = json.dumps(list(block_types[i][j * 512:j * 512 + 512]))
+                else:
+                    block_types_json[i][j] = list(0 for k in range(0, 512))
+
+
+        weblog = logbot.getWebLogger()
+        weblog.sendLine("%s\r\n\r" % json.dumps([bot_block.coords.x, bot_block.coords.y, bot_block.coords.z]))
+
+
+        for i in range(0, 16):
+            for j in range(0, 8):
+                weblog.sendLine("%s\r\n\r" % block_types_json[i][j])
+
 
 class WebClientFactory(Factory):
     "Instantiates a connection with the webinterface - currently via telnet."
+
     def __init__(self, world):
         self.world = world
 
@@ -61,7 +92,6 @@ class ConsoleChat(basic.LineReceiver):
 
 
 def start():
-
     parser = argparse.ArgumentParser(description='Bot arguments.')
     parser.add_argument('--serverhost', default=config.SERVER_HOST,
                         dest='serverhost', help='Minecraft server host')
@@ -104,6 +134,7 @@ def start():
     world = World(host=host, port=port, commander_name=args.commandername, bot_name=args.botname)
     try:
         from twisted.internet import stdio
+
         stdio.StandardIO(ConsoleChat(world))
     except ImportError:
         log.msg("no terminal chat available")
@@ -120,6 +151,7 @@ def start():
             yield mc_factory.online_auth()
         if mc_factory.clean_to_connect:
             reactor.connectTCP(host, port, mc_factory) # connects to the minecraft server
+
     reactor.listenTCP(9393, WebClientFactory(world)) # listens for incoming connections - currently via telnet
     connect()
 
