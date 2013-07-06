@@ -1,0 +1,74 @@
+"""
+A prototype webinterface for the Minecraft Bot TwistedBot and modified versions.
+TODO: replace telnet with something smart.
+"""
+
+__author__ = 'jonas'
+__date__ = '06.07.13'
+
+from bottle import route, run, template, static_file
+import telnetlib
+import json
+import time
+import datetime
+
+
+@route('/bot')
+def commence_webinterface():
+    return template('psicraft_webinterface')
+
+
+@route('/button/<command>')
+def button(command):
+    tel = telnetlib.Telnet("localhost", 9393)
+    tel.write("%s\r\n" % command)
+    bots_answer = tel.read_until("\r\n\r")
+    tel.close()
+    time_now = time.time()
+    format_time = datetime.datetime.fromtimestamp(time_now).strftime('%Y-%m-%d %H:%M:%S')
+    return "Bot <'{0}'> : '{1}'".format(format_time, bots_answer)
+
+
+@route('/query/<command>')
+def button(command):
+    tel = telnetlib.Telnet("localhost", 9393)
+    tel.write("%s\r\n" % command)
+    text = tel.read_until("\r\n\r") #command does currently not get displayed for queries
+
+    bot_block = json.loads(tel.read_until("\r\n\r").strip())
+
+    chunk_list = list()
+    for i in range(0, 128):
+        next_chunk_part = tel.read_until("\r\n\r")
+        next_chunk_part = next_chunk_part.strip()
+        chunk_list.extend(json.loads(next_chunk_part))
+
+    tel.close()
+
+    chunk = [[[[0, 0] for i in range(16)] for j in range(256)] for k in range(16)]
+
+    for x in range(16):
+        for y in range(256):
+            for z in range(16):
+                chunk[x][y][z] = chunk_list[y * 16 * 16 + z * 16 + x]
+
+    bot_height = bot_block[1]
+
+    layers = 20 # 4 layers equal 1kb that are transferred to the webinterface
+
+    web_chunk = [[[[0, 0] for i in range(16)] for j in range(layers)] for k in range(16)]
+
+    for x in range(16):
+        for y in range(layers):
+            for z in range(16):
+                web_chunk[x][y][z] = chunk[x][bot_height - ((layers - 1) / 2) + y][z]
+
+    return json.dumps([web_chunk, bot_block, layers])
+
+
+@route('/static/<filename:path>')
+def server_static(filename):
+    return static_file(filename, root='./')
+
+
+run(host='localhost', port=8080, debug=True)

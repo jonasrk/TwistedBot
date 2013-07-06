@@ -2,6 +2,8 @@ import signal
 import argparse
 import json
 
+import twistedbot.web_comm as web_comm
+
 import syspath_fix
 
 syspath_fix.update_sys_path()
@@ -28,15 +30,21 @@ class WebProtocol(LineReceiver):
         self.factory = factory
         self.world = world
         self.weblog = logbot.newWebLogger(self)
+        self.web_comm = web_comm.WebComm(self, self.weblog)
 
     def lineReceived(self, line):
         "processes the command"
         self.weblog.sendLine("received command %s\r\n\r" % line)
-        #self.world.chat.process_command_line(line)
-        self.send_chunk_to_webinterface()
+        self.world.chat.process_command_line(line)
+        if line.strip() == "q9bl":
+            print "sending webint"
+            self.web_comm.send_chunk_to_webinterface()
+        else:
+            print "process"
+            self.world.chat.process_command_line(line)
+
 
     def send_chunk_to_webinterface(self):
-
         blackboard = self.world.bot.behavior_tree.blackboard
         bot_object = blackboard.bot_object
         bot_block = blackboard.bot_standing_on_block(bot_object)
@@ -55,10 +63,8 @@ class WebProtocol(LineReceiver):
                 else:
                     block_types_json[i][j] = list(0 for k in range(0, 512))
 
-
         weblog = logbot.getWebLogger()
         weblog.sendLine("%s\r\n\r" % json.dumps([bot_block.coords.x, bot_block.coords.y, bot_block.coords.z]))
-
 
         for i in range(0, 16):
             for j in range(0, 8):

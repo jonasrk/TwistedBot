@@ -243,7 +243,7 @@ class Grid(object):
         return False
 
     def collision_aabbs_in(self, bb):
-        out = []und
+        out = []
         for blk in self.blocks_in_aabb(bb.extend_to(0, -1, 0)):
             blk.add_grid_bounding_boxes_to(out)
         return out
