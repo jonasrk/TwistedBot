@@ -1,5 +1,6 @@
-function post_to_url(path) {
-    request = new XMLHttpRequest();
+function send_command(path) {
+
+    var request = new XMLHttpRequest();
     request.open("GET", path, true);
     request.onreadystatechange = function () {
 
@@ -13,30 +14,28 @@ function post_to_url(path) {
     request.send();
 }
 
-var int = 0
-
 function redraw_vis(path) {
 
-    int = self.setInterval(function () {
-        query_to_url(path)
-    }, 1000);
+    redraw_interval = setInterval(function () {
+        query_chunk(path)
+    }, 3000);
 
 }
 
 function stop_redraw_vis() {
 
-    int = window.clearInterval(int)
+    redraw_interval = window.clearInterval(redraw_interval)
 
 }
 
-function query_to_url(path) {
+function query_chunk(path) {
 
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
 
     canvas.width = canvas.width;
 
-    request = new XMLHttpRequest();
+    var request = new XMLHttpRequest();
     request.open("GET", path, true);
     request.onreadystatechange = function () {
 
@@ -51,7 +50,7 @@ function query_to_url(path) {
 
             var layers = 21;
 
-            for (var y =  0; y < layers; y++) {
+            for (var y = 0; y < layers; y++) {
 
                 for (var rows = 0; rows < 16; rows++) {
 
@@ -59,7 +58,7 @@ function query_to_url(path) {
 
                         var block_name = blocks_json[cols][y][rows];
 
-                        var canvas_offset = layers * 15;
+                        var canvas_offset = layers * 25;
 
                         var x_coord = 18 * (cols + rows);
                         var y_coord = canvas_offset + 9 * (rows - cols) - (y * 20);
@@ -97,8 +96,8 @@ function query_to_url(path) {
 
             }
 
-            var x_coord = 18 * (bot_block[0]%16 + bot_block[2]%16);
-            var y_coord = canvas_offset + 9 * (bot_block[2]%16 - bot_block[0]%16) - ((((layers-1)/2)+2) * 20);
+            var x_coord = 18 * (bot_block[0] % 16 + bot_block[2] % 16);
+            var y_coord = canvas_offset + 9 * (bot_block[2] % 16 - bot_block[0] % 16) - ((((layers - 1) / 2) + 2) * 20);
             img.src = "/static/blocks2/bot.png";
             context.drawImage(img, x_coord, y_coord, 40, 80);
 
